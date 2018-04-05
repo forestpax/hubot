@@ -18,7 +18,7 @@
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.1",
     "hubot-slack": "^4.4.0",
-    "todo": "file:../todo"
+    "todo": "file:todo"
   },
   "engines": {
     "node": "6.11.1",
