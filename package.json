@@ -21,6 +21,6 @@
     "todo": "file:../todo"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "6.11.1"
   }
 }
