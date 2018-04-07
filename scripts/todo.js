@@ -9,6 +9,8 @@
 
 'use strict';
 const todo = require('todo');
+const cron = require('cron').CronJob;
+
 module.exports = (robot) => {
   robot.respond(/todo (.+)/i, (msg) => {
     const task = msg.match[1].trim();
@@ -41,5 +43,16 @@ module.exports = (robot) => {
       msg.send(donelist.join('\n'));
     }
   })
+ const CronJob = new cron({
+  cronTime: '00 00 20 * * *',
+  start: true,
+  onTick: function () {
+    if (todo.list().length === 0) {
+      robot.send('(TODO はありません)');
+    } else {
+      robot.send(todo.list().join('\n'));
+    } 
+  }
+});
 
 }
