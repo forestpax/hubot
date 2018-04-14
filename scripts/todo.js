@@ -11,6 +11,8 @@
 const todo = require('todo');
 const cron = require('cron').CronJob;
 
+const Todo = require('../todo/save');
+
 module.exports = (robot) => {
   robot.respond(/todo (.+)/i, (msg) => {
     const task = msg.match[1].trim();
@@ -28,20 +30,46 @@ module.exports = (robot) => {
     msg.send('削除しました: ' + task);
   });
   robot.respond(/list/i, (msg) => {
-    const list = todo.list();
-    if (list.length === 0) {
+//    const list = todo.list();
+/*    if (list.length === 0) {
       msg.send('(TODO はありません)');
     } else {
       msg.send(list.join('\n'));
     }
+*/
+const todolist = new Array();
+Todo.findAll().then(result => {
+  result.forEach(r => {
+    if(r.status === false) {
+      todolist.push(r.todo);
+    }
   });
+}).then(() => {
+  var x = todolist.join('\n');
+  msg.send(x);
+});
+
+});
   robot.respond(/donelist/i, (msg) => {
-    const donelist = todo.donelist();
+/*    const donelist = todo.donelist();
     if (donelist.length === 0) {
       msg.send('(完了した TODO はありません)')
     } else {
       msg.send(donelist.join('\n'));
+      }
+*/
+const donelist = new Array();
+Todo.findAll().then(result => {
+  result.forEach(r => {
+    if(r.status === true) {
+      donelist.push(r.todo);
     }
+  });
+}).then(() => {
+  var x = donelist.join('\n');
+  msg.send(x);
+});
+
   })
  const CronJob = new cron({
   cronTime: '00 00 20 * * *',

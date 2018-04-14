@@ -5,6 +5,7 @@ let tasks = new Map();
 
 const fs = require('fs');
 const fileName = './tasks.json';
+const Todo = require('./save');
 
 try {
   const data = fs.readFileSync(fileName, 'utf8');
@@ -24,6 +25,12 @@ function saveTasks() {
  */
 function todo(task) {
   tasks.set(task, false);
+  Todo.create({
+    todo: task,
+    status: false
+  }).then(() => {
+
+  });
   saveTasks();
 }
 
@@ -50,9 +57,21 @@ function isNotDone(tasksAndIsDonePair) {
 * @return {array}
 */
 function list() {
-  return Array.from(tasks)
-      .filter(isNotDone)
-      .map(t => t[0]);
+  const todolist = new Array();
+  Todo.findAll().then(result => {
+    result.forEach(r => {
+      if(r.status === false) {
+        todolist.push(r.todo);
+      }
+    });
+  }).then(() => {
+    var x = todolist.join('\n');
+    return x;
+  });
+
+ // return Array.from(tasks)
+   //   .filter(isNotDone)
+     // .map(t => t[0]);
 }
 
 /**
@@ -60,6 +79,17 @@ function list() {
 * @param {string} task
 */
 function done(task) {
+
+  Todo.update({
+    status: true
+  }, {
+    where: {
+      todo: task
+    }
+  }).then(() => {
+
+  });
+
   if(tasks.has(task)) {
     tasks.set(task, true);
   }
@@ -78,6 +108,15 @@ function donelist() {
 
 
 function del(task) {
+
+  Todo.destroy({
+    where: {
+      todo: task
+    }
+  }).then(() => {
+
+  });
+
   tasks.delete(task);
   saveTasks();
 }
