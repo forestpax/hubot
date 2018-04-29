@@ -79,6 +79,7 @@ module.exports = (robot) => {
     });
 
   })
+  /*
   const CronJob = new cron({
     cronTime: '00 00 20 * * *',
     start: true,
@@ -90,5 +91,30 @@ module.exports = (robot) => {
       }
     }
   });
+*/
+  const CronJob = new cron({
+    cronTime: '00 00 20 * * *',
+    start: true,
+    onTick: function () {
+      var list = new Array();
+      Todo.findAll(
+        { status: false }
+      ).then(result => {
+        result.forEach(r => {
+          if (r.status === false) {
+            list.push(r.todo);
+          }
+        });
+      }).then(() => {
+        if(list.length === 0) {
+          var x = 'No TODO';
+        } else{
+        var x = list.join('\n');
+        robot.send({room: 'todo'}, x);
+        }
+        
 
+      });
+    }
+  });
 }
