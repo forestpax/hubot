@@ -15,6 +15,9 @@ const Todo = sequelize.define('Todo', {
   status: {
     //真偽値
     type: Sequelize.BOOLEAN
+  },
+  user: {
+    type: Sequelize.STRING
   }
 }, {
   freezeTableName: true,

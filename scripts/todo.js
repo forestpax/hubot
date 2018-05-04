@@ -16,17 +16,23 @@ const Todo = require('../todo/save');
 module.exports = (robot) => {
   robot.respond(/todo (.+)/i, (msg) => {
     const task = msg.match[1].trim();
-    todo.todo(task);
+    const user = msg.message.user.name;
+    todo.todo(task, user);
+    //todo.todo(task);
     msg.send('追加しました: ' + task);
   });
   robot.respond(/done (.+)/i, (msg) => {
     const task = msg.match[1].trim();
-    todo.done(task);
+    const user = msg.message.user.name;
+    //todo.done(task);
+    todo.done(task, user);
     msg.send('完了にしました: ' + task);
   });
   robot.respond(/del (.+)/i, (msg) => {
     const task = msg.match[1].trim();
-    todo.del(task);
+    const user = msg.message.user.name;
+    //todo.del(task);
+    todo.del(task, user);
     msg.send('削除しました: ' + task);
   });
   robot.respond(/list/i, (msg) => {
@@ -37,9 +43,10 @@ module.exports = (robot) => {
           msg.send(list.join('\n'));
         }
     */
+    const user = msg.message.user.name;
     const todolist = new Array();
     Todo.findAll(
-      { status: false }
+      { status: false, user: user}
     ).then(result => {
       result.forEach(r => {
         if (r.status === false) {
@@ -65,8 +72,9 @@ module.exports = (robot) => {
           }
     */
     const donelist = new Array();
+    const user = msg.message.user.name;
     Todo.findAll(
-      { status: true }
+      { status: true, user: user}
     ).then(result => {
       result.forEach(r => {
         if (r.status === true) {

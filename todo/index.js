@@ -23,11 +23,12 @@ function saveTasks() {
  * TODOを追加する
  * @param {string} task 
  */
-function todo(task) {
+function todo(task, user) {
   tasks.set(task, false);
   Todo.create({
     todo: task,
-    status: false
+    status: false,
+    user: user
   }).then(() => {
 
   });
@@ -78,13 +79,14 @@ function list() {
 * TODOを完了状態にする
 * @param {string} task
 */
-function done(task) {
+function done(task, user) {
 
   Todo.update({
     status: true
   }, {
     where: {
-      todo: task
+      todo: task,
+      user: user
     }
   }).then(() => {
 
@@ -107,11 +109,12 @@ function donelist() {
 }
 
 
-function del(task) {
+function del(task, user) {
 
   Todo.destroy({
     where: {
-      todo: task
+      todo: task,
+      user: user
     }
   }).then(() => {
 
