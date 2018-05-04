@@ -45,9 +45,9 @@ module.exports = (robot) => {
     */
     const user = msg.message.user.name;
     const todolist = new Array();
-    Todo.findAll(
-      { status: false, user: user}
-    ).then(result => {
+    Todo.findAll({
+      where:{status: false, user: user}
+    }).then(result => {
       result.forEach(r => {
         if (r.status === false) {
           todolist.push(r.todo);
@@ -73,9 +73,9 @@ module.exports = (robot) => {
     */
     const donelist = new Array();
     const user = msg.message.user.name;
-    Todo.findAll(
-      { status: true, user: user}
-    ).then(result => {
+    Todo.findAll({
+      where: {status: true, user: user}
+    }).then(result => {
       result.forEach(r => {
         if (r.status === true) {
           donelist.push(r.todo);
